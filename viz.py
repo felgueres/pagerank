@@ -3,22 +3,30 @@ import os
 
 def visualize_pagerank(links, scores, filename="pagerank_graph"):
     dot = graphviz.Digraph(comment='PageRank Graph')
-    dot.attr(rankdir='TB', size='8,6')
-    dot.attr('node', shape='circle', style='filled')
+    dot.attr(rankdir='TB', size='12,10', dpi='300')
+    dot.attr('node', shape='circle', style='filled', fontname='Arial')
+    dot.attr('edge', fontname='Arial')
     min_score = min(scores.values())
     max_score = max(scores.values())
     score_range = max_score - min_score if max_score != min_score else 1
+    
     for page, score in scores.items():
         normalized_score = (score - min_score) / score_range
-        node_size = 0.5 + 1.5 * normalized_score
+        node_size = 1.0 + 2.0 * normalized_score
         dot.node(page, 
-                label=f"{page}\\n{score:.2f}",
+                label=f"{page}\\n{score:.3f}",
                 width=str(node_size),
                 height=str(node_size),
-                fontsize="12",)
+                fillcolor="black",
+                fontcolor="white",
+                fontsize="14",
+                penwidth="2")
     
     for source, target in links:
-        dot.edge(source, target, color='gray', arrowsize='0.8')
+        dot.edge(source, target, 
+                color='darkgray', 
+                arrowsize='1.0',
+                penwidth="1.5")
     
     try:
         dot.render(filename, format='png', cleanup=True)

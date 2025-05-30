@@ -77,3 +77,29 @@ Notes:
 - Page A converges to highest pagerank (~0.43) because it receives links from both B and C
 - Page C maintains steady score (~0.33) 
 - Page B has lowest score (~0.24) as it only receives one incoming link
+
+## Search Engine
+
+### Offline 
+1. Crawl web: collect documents and links
+2. Compute PageRank: importance for all pages
+3. Build inverted index: keyword to document mappings
+4. Build lexicon: word to wordID mappings 
+
+### Online  
+1. Parse query
+2. Lookup lexicon  
+3. Index lookup
+4. Find intersection for docs containing query terms
+5. Apply ranking: text relevance + pageRank
+6. Return final score list
+
+eg. 
+
+Query: "google search"   
+↓   
+Lexicon lookup: ["google"→12345, "search"→12346]  
+↓  
+Index lookup: [12345→[doc1,doc5,doc23], 12346→[doc2,doc5,doc67]]  
+↓  
+Intersection: documents containing both wordIDs
