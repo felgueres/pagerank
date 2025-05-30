@@ -3,7 +3,7 @@ import os
 
 def visualize_pagerank(links, scores, filename="pagerank_graph"):
     dot = graphviz.Digraph(comment='PageRank Graph')
-    dot.attr(rankdir='TB', size='12,10', dpi='300')
+    dot.attr(rankdir='TB', size='8,8', dpi='400')
     dot.attr('node', shape='circle', style='filled', fontname='Arial')
     dot.attr('edge', fontname='Arial')
     min_score = min(scores.values())

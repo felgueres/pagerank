@@ -71,7 +71,9 @@ Use link text to improve quality results
 | 3         | 0.44   | 0.23   | 0.33   | 0.03      |
 | 4         | 0.43   | 0.24   | 0.33   | 0.01      |
 
-![ex_1.png](ex_1.png)
+<img src="./img/example_1.png" width="400" alt="Example 1">
+
+<!-- add example_2_plot --> 
 
 Notes:
 - Page A converges to highest pagerank (~0.43) because it receives links from both B and C
@@ -94,12 +96,24 @@ Notes:
 5. Apply ranking: text relevance + pageRank
 6. Return final score list
 
-eg. 
+```mermaid
+flowchart TD
+    A["Query: 'google search'"] --> B[Lexicon Lookup]
+    B --> C["'google' → wordID 12345<br/>'search' → wordID 12346"]
+    C --> D[Index Lookup]
+    D --> E["wordID 12345 → [doc1, doc5, doc23, ...]<br/>wordID 12346 → [doc2, doc5, doc67, ...]"]
+    E --> F[Intersection]
+    F --> G["Documents with both words:<br/>[doc5, ...]"]
+    G --> H[Apply PageRank]
+    H --> I["Combine text relevance + PageRank scores"]
+    I --> J["Final ranked results:<br/>doc5 (score: 0.95)<br/>doc23 (score: 0.87)<br/>..."]
+    
+    style A fill:#e1f5fe
+    style J fill:#c8e6c9
+    style F fill:#fff3e0
+    style H fill:#fce4ec
+```
 
-Query: "google search"   
-↓   
-Lexicon lookup: ["google"→12345, "search"→12346]  
-↓  
-Index lookup: [12345→[doc1,doc5,doc23], 12346→[doc2,doc5,doc67]]  
-↓  
-Intersection: documents containing both wordIDs
+relationship inbound links to pagerank
+
+<img src="./img/example_2_plot.png" width="400" alt="Example 1">
