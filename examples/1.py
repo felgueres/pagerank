@@ -16,7 +16,7 @@ for source, target in links:
     print(f"  {source} -> {target}")
     
 pr = PageRank(damping_factor=0.85, tolerance=1e-6)
-scores = pr.calculate_pagerank(links)
+scores = pr.calculate(links)
     
 print("\nPageRank Scores:")
 print("-" * 20)

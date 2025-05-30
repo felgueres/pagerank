@@ -41,7 +41,7 @@ class PageRank:
             adjacency[source_idx][target_idx] = 1
         return page_to_index, adjacency
     
-    def calculate_pagerank(self, links: List[Tuple[str, str]]) -> Dict[str, float]:
+    def calculate(self, links: List[Tuple[str, str]]) -> Dict[str, float]:
         """Calculate PageRank scores for all pages.
         """
         if not links: return {}
@@ -53,34 +53,25 @@ class PageRank:
         
         for iteration in range(self.max_iterations):
             new_pagerank = np.zeros(n_pages)
-            
-            # Base probability: random jump to any page
             new_pagerank += (1 - self.damping_factor) / n_pages
-            
             # Add contributions from incoming links
             for source_idx in range(n_pages):
                 if outbound_counts[source_idx] > 0:
-                    # Normal page: distribute rank among linked pages
                     contribution = self.damping_factor * pagerank[source_idx] / outbound_counts[source_idx]
                     for target_idx in range(n_pages):
                         if adjacency[source_idx][target_idx] == 1:
                             new_pagerank[target_idx] += contribution
                 else:
-                    # Dangling node: distribute rank equally among all pages
+                    # Means it's a dangling node, distribute rank equally to all pages
                     contribution = self.damping_factor * pagerank[source_idx] / n_pages
                     new_pagerank += contribution
             
-            max_change = np.max(np.abs(new_pagerank - pagerank))
+            max_delta = np.max(np.abs(new_pagerank - pagerank))
             pagerank = new_pagerank
             
-            if iteration % 10 == 0:
-                print(f"Iteration {iteration}: max change = {max_change:.8f}")
-            
-            if max_change < self.tolerance:
+            if max_delta < self.tolerance:
                 print(f"Converged after {iteration + 1} iterations")
                 break
-        else:
-            print(f"Reached maximum iterations ({self.max_iterations})")
         
         index_to_page = {i: page for page, i in page_to_index.items()}
         return {index_to_page[i]: score for i, score in enumerate(pagerank)}
