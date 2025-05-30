@@ -18,15 +18,6 @@ class PageRank:
         self.max_iterations = max_iterations
     
     def build_graph(self, links: list[tuple[str, str]]):
-        """
-        Build adjacency matrix from list of links.
-        
-        Args:
-            links: List of (source, target) page pairs
-            
-        Returns:
-            Tuple of (page_to_index mapping, adjacency matrix)
-        """
         pages = set()
         for source, target in links:
             pages.add(source)
@@ -54,6 +45,7 @@ class PageRank:
         for iteration in range(self.max_iterations):
             new_pagerank = np.zeros(n_pages)
             new_pagerank += (1 - self.damping_factor) / n_pages
+            
             # Add contributions from incoming links
             for source_idx in range(n_pages):
                 if outbound_counts[source_idx] > 0:
@@ -67,11 +59,20 @@ class PageRank:
                     new_pagerank += contribution
             
             max_delta = np.max(np.abs(new_pagerank - pagerank))
+            self.show_iteration_results(iteration, new_pagerank, max_delta, page_to_index)
             pagerank = new_pagerank
-            
             if max_delta < self.tolerance:
                 print(f"Converged after {iteration + 1} iterations")
                 break
         
         index_to_page = {i: page for page, i in page_to_index.items()}
         return {index_to_page[i]: score for i, score in enumerate(pagerank)}
+
+    def show_iteration_results(self, iteration, new_pagerank, max_delta, page_to_index, verbose=True):
+        """Print PageRank values for current iteration."""
+        if verbose:
+            print(f"Iteration {iteration + 1}:")
+            index_to_page = {i: page for page, i in page_to_index.items()}
+            for i, score in enumerate(new_pagerank):
+                print(f"  {index_to_page[i]}: {score:.6f}")
+            print(f"  Max change: {max_delta:.3f}\n\n")

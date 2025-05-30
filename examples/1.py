@@ -1,4 +1,5 @@
 from pagerank import PageRank
+import viz
 
 links = [
     ("A", "B"),
@@ -8,14 +9,13 @@ links = [
     ("B", "A")  # Added back-link to make it more interesting
 ]
 
-print()
 print("Graph links")
-print("-" * 20)
+print("-" * 20 + "\n")
 
 for source, target in links:
     print(f"  {source} -> {target}")
     
-pr = PageRank(damping_factor=0.85, tolerance=1e-6)
+pr = PageRank(damping_factor=0.85, tolerance=1e-3)
 scores = pr.calculate(links)
     
 print("\nPageRank Scores:")
@@ -27,3 +27,5 @@ for page, score in sorted_pages:
 
 total_score = sum(scores.values())
 print(f"\nTotal PageRank sum: {total_score:.1f}")
+
+viz.visualize_pagerank(links, scores, "pagerank_example")
